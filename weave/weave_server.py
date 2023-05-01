@@ -27,6 +27,7 @@ from weave import engine_trace
 from weave import environment
 from weave import logs
 from weave import filesystem
+from weave import storage
 from weave.server_error_handling import client_safe_http_exceptions_as_werkzeug
 
 # PROFILE_DIR = "/tmp/weave/profile"
@@ -127,6 +128,13 @@ def list_ops():
         if serialized_op["output_type"] != "any":
             ret.append(serialized_op)
     return {"data": ret}
+
+
+@blueprint.route("/__weave/publish_test", methods=["POST"])
+def publish_test():
+    from weave import weave_types as types
+
+    storage.publish("test", "uncategorized/test", types.String())
 
 
 @blueprint.route("/__weave/execute", methods=["POST"])
